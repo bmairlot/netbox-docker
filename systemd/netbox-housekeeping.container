@@ -1,0 +1,17 @@
+[Unit]
+Description=Netbox housekeeping Container
+
+[Container]
+Image=docker.io/netboxcommunity/netbox:v4.0.9-2.9.1
+ContainerName=netbox-housekeeping
+EnvironmentFile=env/netbox.env
+Volume=/home/bruno/Downloads/netbox-docker/configuration:/etc/netbox/config:Z,ro
+Volume=netbox-media-files:/opt/netbox/netbox/media:Z
+Volume=netbox-reports-files:/opt/netbox/netbox/reports:Z
+Volume=netbox-scripts-files:/opt/netbox/netbox/scripts:Z
+HealthInterval=15s
+HealthTimeout=5s
+HealthStartPeriod=1m
+HealthCmd=ps -aux | grep -v grep | grep -q housekeeping || exit 1
+Exec=/opt/netbox/housekeeping.sh
+Network=netbox

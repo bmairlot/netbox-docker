@@ -1,0 +1,14 @@
+[Unit]
+Description=The redis container for Netbox
+
+[Container]
+Image=docker.io/redis:7-alpine
+ContainerName=netbox-redis
+HostName=redis
+EnvironmentFile=env/redis.env
+Exec=sh -c "redis-server --appendonly yes --requirepass $REDIS_PASSWORD"
+Network=netbox
+Volume=netbox-redis-data:/data
+
+[Install]
+WantedBy=multi-user.target

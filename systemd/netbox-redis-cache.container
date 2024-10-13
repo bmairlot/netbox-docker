@@ -1,0 +1,14 @@
+[Unit]
+Description=The redis cache container for Netbox
+
+[Container]
+Image=docker.io/redis:7-alpine
+ContainerName=netbox-redis-cache
+HostName=redis-cache
+EnvironmentFile=env/redis-cache.env
+Exec=sh -c "redis-server --requirepass $REDIS_PASSWORD"
+Network=netbox
+Volume=netbox-redis-cache-data:/data
+
+[Install]
+WantedBy=multi-user.target

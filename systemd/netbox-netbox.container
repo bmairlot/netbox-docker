@@ -1,0 +1,18 @@
+[Unit]
+Description=Netbox Container
+
+[Container]
+Image=docker.io/netboxcommunity/netbox:v4.0.9-2.9.1
+ContainerName=netbox-netbox
+PublishPort=0.0.0.0:8000:8080
+PublishPort=0.0.0.0:8001:8001
+EnvironmentFile=env/netbox.env
+Volume=/home/bruno/Downloads/netbox-docker/configuration:/etc/netbox/config:Z,ro
+Volume=netbox-media-files:/opt/netbox/netbox/media:Z
+Volume=netbox-reports-files:/opt/netbox/netbox/reports:Z
+Volume=netbox-scripts-files:/opt/netbox/netbox/scripts:Z
+HealthInterval=15s
+HealthTimeout=3s
+HealthStartPeriod=90s
+HealthCmd=curl -f http://localhost:8080/login/ || exit 1
+Network=netbox
