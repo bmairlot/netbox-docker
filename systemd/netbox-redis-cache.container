@@ -14,7 +14,7 @@ HealthStartPeriod=20s
 HealthTimeout=30s
 HealthStartupInterval=10s
 HealthStartupRetries=5
-
+Notify=healthy
 
 [Install]
 WantedBy=multi-user.target
