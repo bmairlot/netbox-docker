@@ -19,4 +19,4 @@ HealthCmd=curl -f http://localhost:8080/login/ || exit 1
 Network=netbox
 
 [Service]
-ExecStartPre=podman run --rm -it  -v ./configuration:/mnt/source:Z -v netbox-configuration:/mnt/target  alpine /bin/cp -rf /mnt/source/ /mnt/target/
+ExecStartPre=podman run --rm -it  -v ./netbox-configuration:/mnt/source:Z -v netbox-configuration:/mnt/target  alpine /bin/cp -rf /mnt/source/ /mnt/target/
