@@ -1,7 +1,0 @@
-[Unit]
-Description=Netbox Pod network
-
-[Network]
-NetworkName=netbox
-IPv6=true
-DNS=8.8.8.8

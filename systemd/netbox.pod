@@ -1,0 +1,7 @@
+[Unit]
+Description=Netbox Pod
+
+[Pod]
+PodName=netbox
+PublishPort=0.0.0.0:8000:8080
+PublishPort=0.0.0.0:8001:8001
