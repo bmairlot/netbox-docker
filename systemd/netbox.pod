@@ -5,3 +5,7 @@ Description=Netbox Pod
 PodName=netbox
 PublishPort=0.0.0.0:8000:8080
 PublishPort=0.0.0.0:8001:8001
+Network=netbox
+DNS=172.16.0.1
+IP=172.16.0.172
+

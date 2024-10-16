@@ -15,4 +15,4 @@ HealthTimeout=5s
 HealthStartPeriod=1m
 HealthCmd=ps -aux | grep -v grep | grep -q housekeeping || exit 1
 Exec=/opt/netbox/housekeeping.sh
-Network=netbox
+

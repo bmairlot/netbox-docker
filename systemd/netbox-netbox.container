@@ -5,7 +5,6 @@ Requires=netbox-postgres.service netbox-redis.service netbox-redis-cache.service
 [Container]
 Image=docker.io/netboxcommunity/netbox:latest-3.0.2
 ContainerName=netbox-netbox
-
 EnvironmentFile=env/netbox.env
 Volume=netbox-media-files:/opt/netbox/netbox/media:Z
 Volume=netbox-reports-files:/opt/netbox/netbox/reports:Z
