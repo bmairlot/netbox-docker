@@ -55,7 +55,7 @@ jobs:
           - ./build-latest.sh
           - PRERELEASE=true ./build-latest.sh
           - ./build.sh feature
-          - ./build.sh develop
+          - ./build.sh main
         os:
           - ubuntu-latest
           - self-hosted
