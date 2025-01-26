@@ -71,8 +71,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get update -qq \
     && apt-get install \
       --yes -qq --no-install-recommends \
-      unit=1.33.0-1~noble \
-      unit-python3.12=1.33.0-1~noble \
+      unit=1.34.1-1~noble \
+      unit-python3.12=1.34.1-1~noble \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /opt/netbox/venv /opt/netbox/venv

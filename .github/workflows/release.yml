@@ -17,7 +17,7 @@ jobs:
           - ./build-latest.sh
           - PRERELEASE=true ./build-latest.sh
           - ./build.sh feature
-          - ./build.sh develop
+          - ./build.sh main
         platform:
           - linux/amd64,linux/arm64
       fail-fast: false
