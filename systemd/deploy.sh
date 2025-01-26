@@ -111,8 +111,9 @@ if [ -n "$RESTORE_FILE" ]; then
     fi
     echo "Restoring database from $RESTORE_FILE..."
     sleep 5  # Wait for PostgreSQL to be ready
-    if ! podman exec "${NAME}-postgres" pg_restore -U postgres -d netbox < "$RESTORE_FILE"; then
+    if ! podman exec "${NAME}-postgres" psql -U netbox -d netbox l< "$RESTORE_FILE"; then
         error_exit "Database restore failed"
     fi
     echo "Database restored successfully"
 fi
+

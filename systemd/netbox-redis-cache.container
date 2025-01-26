@@ -4,7 +4,6 @@ Description=The redis cache container for Netbox
 [Container]
 ContainerName=netbox-redis-cache
 Image=docker.io/valkey/valkey:8.0-alpine
-HostName=redis-cache
 EnvironmentFile=env/redis-cache.env
 Exec=sh -c "valkey-server --requirepass $REDIS_PASSWORD"
 Volume=netbox-redis-cache-data:/data
