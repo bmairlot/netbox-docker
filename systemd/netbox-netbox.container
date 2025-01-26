@@ -14,7 +14,7 @@ HealthInterval=15s
 HealthTimeout=3s
 HealthStartPeriod=90s
 HealthCmd=curl -f http://localhost:8080/login/ || exit 1
-Network=netbox
+Pod=netbox.pod
 
 [Service]
 ExecStartPre=podman run --rm -it  -v ./netbox-configuration:/mnt/source  -v netbox-configuration:/mnt/target   alpine /bin/sh -c '/bin/cp -rf /mnt/source/* /mnt/target/'

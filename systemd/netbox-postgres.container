@@ -14,7 +14,7 @@ HealthStartupInterval=10s
 HealthStartupRetries=5
 Notify=healthy
 DNS=172.16.0.1
-Pod=netbox
+Pod=netbox.pod
 
 [Install]
 WantedBy=multi-user.target

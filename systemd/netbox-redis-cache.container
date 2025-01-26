@@ -14,6 +14,7 @@ HealthTimeout=30s
 HealthStartupInterval=10s
 HealthStartupRetries=5
 Notify=healthy
+Pod=netbox.pod
 
 [Install]
 WantedBy=multi-user.target
