@@ -9,6 +9,18 @@ error_exit() {
     exit 1
 }
 
+# Function to execute command and handle errors
+execute_command() {
+   local description="$1"
+   local command="$2"
+
+   echo "$description"
+   if ! $command; then
+       echo "Error: Command '$command' failed with exit code $?"
+       exit 1
+   fi
+}
+
 # Default name
 NAME="netbox"
 
@@ -21,11 +33,13 @@ while [[ "$#" -gt 0 ]]; do
     shift
 done
 
+SUSER=""
 # Set DESTINATION based on whether the user is root or not
 if [ "$(id -u)" -eq 0 ]; then
     DESTINATION="/etc/containers/systemd"
 else
     DESTINATION="${HOME}/.config/containers/systemd"
+    SUSER="--user"
 fi
 
 # Check if the destination directory exists
@@ -71,3 +85,9 @@ if [ -d "$PARENT_DIR/configuration" ]; then
 else
     echo "configuration directory not found in $PARENT_DIR."
 fi
+
+
+# Execute commands
+execute_command "Reloading quadlet files" "systemctl $SUSER daemon-reload"
+execute_command "Starting $NAME network..." "systemctl $SUSER start ${NAME}-network"
+execute_command "Starting $NAME pod..." "systemctl $SUSER start ${NAME}-pod"
