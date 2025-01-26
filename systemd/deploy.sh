@@ -40,6 +40,7 @@ fi
 
 # Get the directory where the script is located
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
+# Get the netbox-docker main directory
 PARENT_DIR="$(dirname "$SCRIPT_DIR")"
 
 # Copy .pod, .volume, .container, and .network files to the destination
