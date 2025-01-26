@@ -23,11 +23,12 @@ execute_command() {
 
 # Default name
 NAME="netbox"
+RESTORE_FILE=""
 
-# Parse command line arguments
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         --name) NAME="$2"; shift ;;
+        --restore) RESTORE_FILE="$2"; shift ;;
         *) error_exit "Unknown parameter: $1" ;;
     esac
     shift
@@ -100,4 +101,18 @@ execute_command "Starting $NAME reports volume." "systemctl $SUSER start ${NAME}
 execute_command "Starting $NAME scripts volume..." "systemctl $SUSER start ${NAME}-scripts-files-volume"
 execute_command "Starting $NAME media files volume..." "systemctl $SUSER start ${NAME}-media-files-volume"
 
-
+#Starting containers
+execute_command "Starting $NAME postgresql container..." "systemctl $SUSER start ${NAME}-postgres"
+# Checking if backup are required
+# Add after the postgresql container start:
+if [ -n "$RESTORE_FILE" ]; then
+    if [ ! -f "$RESTORE_FILE" ]; then
+        error_exit "Restore file $RESTORE_FILE does not exist"
+    fi
+    echo "Restoring database from $RESTORE_FILE..."
+    sleep 5  # Wait for PostgreSQL to be ready
+    if ! podman exec "${NAME}-postgres" pg_restore -U postgres -d netbox < "$RESTORE_FILE"; then
+        error_exit "Database restore failed"
+    fi
+    echo "Database restored successfully"
+fi
