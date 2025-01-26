@@ -96,8 +96,8 @@ execute_command "Starting $NAME postgresql data..." "systemctl $SUSER start ${NA
 execute_command "Starting $NAME redis cache data..." "systemctl $SUSER start ${NAME}-redis-cache-data-volume"
 execute_command "Starting $NAME redis data..." "systemctl $SUSER start ${NAME}-redis-data-volume"
 execute_command "Starting $NAME configuration volume..." "systemctl $SUSER start ${NAME}-configuration-volume"
-execute_command "Starting $NAME reports volume." "systemctl $SUSER start ${NAME}-reports-volume"
-execute_command "Starting $NAME scripts volume..." "systemctl $SUSER start ${NAME}-scripts-volume"
+execute_command "Starting $NAME reports volume." "systemctl $SUSER start ${NAME}-reports-files-volume"
+execute_command "Starting $NAME scripts volume..." "systemctl $SUSER start ${NAME}-scripts-files-volume"
 execute_command "Starting $NAME media files volume..." "systemctl $SUSER start ${NAME}-media-files-volume"
 
 
