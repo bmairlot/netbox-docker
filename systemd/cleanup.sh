@@ -43,6 +43,8 @@ else
 fi
 
 # Execute commands
+systemctl $SUSER stop "${NAME}"-redis-cache
+systemctl $SUSER stop "${NAME}"-redis
 systemctl $SUSER stop "${NAME}"-postgres
 systemctl $SUSER stop "${NAME}"-pod
 systemctl $SUSER stop "${NAME}"-network
