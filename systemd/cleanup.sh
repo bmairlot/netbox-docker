@@ -46,9 +46,11 @@ fi
 execute_command "Stopping $NAME pod..." "systemctl $SUSER stop ${NAME}-pod"
 execute_command "Stopping  $NAME network..." "systemctl $SUSER stop ${NAME}-network"
 
+execute_command "Removing $NAME pod..." "podman pod rm ${NAME}"
+execute_command "Removing $NAME network..." "podman network rm -f ${NAME}"
+
 echo Removing all quadlet file from systemd
 rm -rf "${DESTINATION}/$NAME-*"
-
 
 # Execute commands
 execute_command "Reloading quadlet files" "systemctl $SUSER daemon-reload"
