@@ -43,6 +43,7 @@ else
 fi
 
 # Execute commands
+systemctl $SUSER stop "${NAME}"-postgres
 systemctl $SUSER stop "${NAME}"-pod
 systemctl $SUSER stop "${NAME}"-network
 
