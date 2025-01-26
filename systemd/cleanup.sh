@@ -43,8 +43,8 @@ else
 fi
 
 # Execute commands
-execute_command "Stoping $NAME pod..." "systemctl $SUSER stop ${NAME}-pod"
-execute_command "Starting $NAME network..." "systemctl $SUSER start ${NAME}-network"
+execute_command "Stopping $NAME pod..." "systemctl $SUSER stop ${NAME}-pod"
+execute_command "Stopping  $NAME network..." "systemctl $SUSER stop ${NAME}-network"
 
 echo Removing all quadlet file from systemd
 rm -rf "${DESTINATION}/$NAME-*"
@@ -52,5 +52,4 @@ rm -rf "${DESTINATION}/$NAME-*"
 
 # Execute commands
 execute_command "Reloading quadlet files" "systemctl $SUSER daemon-reload"
-execute_command "Starting $NAME network..." "systemctl $SUSER start ${NAME}-network"
-execute_command "Starting $NAME pod..." "systemctl $SUSER start ${NAME}-pod"
+
