@@ -3,11 +3,11 @@ Description=The redis cache container for Netbox
 
 [Container]
 ContainerName=netbox-redis-cache
-Image=docker.io/valkey/valkey:8.0-alpine
+Image=docker.io/valkey/valkey:8.0.2-alpine
 EnvironmentFile=env/redis-cache.env
 Exec=sh -c "valkey-server --requirepass $REDIS_PASSWORD"
 Volume=netbox-redis-cache-data:/data
-HealthCmd=valkey-cli --no-auth-warning -u valkey://default:$REDIS_PASSWORD@localhost:6379/0 ping | grep -q "PONG"
+HealthCmd=valkey-cli --no-auth-warning -u valkey://default:$REDIS_PASSWORD@localhost:6379/0 ping | grep -q PONG
 HealthStartPeriod=20s
 HealthTimeout=30s
 HealthStartupInterval=10s

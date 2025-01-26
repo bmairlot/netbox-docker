@@ -116,4 +116,7 @@ if [ -n "$RESTORE_FILE" ]; then
     fi
     echo "Database restored successfully"
 fi
+execute_command "Starting $NAME postgresql container..." "systemctl $SUSER start ${NAME}-redis"
+execute_command "Starting $NAME postgresql container..." "systemctl $SUSER start ${NAME}-redis-cache"
+
 
