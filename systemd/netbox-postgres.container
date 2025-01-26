@@ -5,7 +5,6 @@ Description=Postgresql container
 ContainerName=netbox-postgres
 Image=docker.io/postgres:17-alpine
 EnvironmentFile=env/postgres.env
-HostName=postgres
 Volume=netbox-postgres-data:/var/lib/postgresql/data
 HealthCmd=pg_isready -q -t 2 -d $POSTGRES_DB -U $POSTGRES_USER
 HealthStartPeriod=20s
