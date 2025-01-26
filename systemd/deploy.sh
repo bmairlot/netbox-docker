@@ -30,18 +30,13 @@ fi
 
 # Check if the destination directory exists
 if [ ! -d "$DESTINATION" ]; then
-    error_exit "Destination directory $DESTINATION does not exist."
+    mkdir -p "$DESTINATION" || error_exit "Failed to create directory $DESTINATION"
 fi
 
 # Check if the pod already exists
 if podman pod exists "$NAME"; then
     error_exit "Pod $NAME already exists. Please configure it manually, or remove all configuration and restart the deployment procedure."
 fi
-
-# Create a pod with the specified name
-podman pod create --name "$NAME" || error_exit "Failed to create pod '$NAME'"
-
-echo "Pod '$NAME' created successfully. Configuration will be stored in $DESTINATION."
 
 # Get the directory where the script is located
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
