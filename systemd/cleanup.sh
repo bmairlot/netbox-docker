@@ -43,6 +43,7 @@ else
 fi
 
 # Execute commands
+systemctl $SUSER stop "${NAME}"-netbox
 systemctl $SUSER stop "${NAME}"-redis-cache
 systemctl $SUSER stop "${NAME}"-redis
 systemctl $SUSER stop "${NAME}"-postgres

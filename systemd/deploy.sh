@@ -118,5 +118,5 @@ if [ -n "$RESTORE_FILE" ]; then
 fi
 execute_command "Starting $NAME redis container..." "systemctl $SUSER start ${NAME}-redis"
 execute_command "Starting $NAME redis-cache container..." "systemctl $SUSER start ${NAME}-redis-cache"
-
+execute_command "Starting $NAME netbox container..." "systemctl $SUSER start ${NAME}-netbox"
 
