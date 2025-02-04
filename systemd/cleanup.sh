@@ -50,10 +50,10 @@ systemctl $SUSER stop "${NAME}"-postgres
 systemctl $SUSER stop "${NAME}"-pod
 systemctl $SUSER stop "${NAME}"-network
 
-podman pod rm "${NAME}"
+podman pod rm "${NAME}" || true
 podman network rm -f "${NAME}"
 
-echo Removing all quadlet file from systemd
+echo Removing all quadlet file and configuration from systemd
 rm -rf "${DESTINATION}/$NAME-*"
 
 # Execute commands

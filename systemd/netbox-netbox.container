@@ -12,6 +12,6 @@ Volume=netbox-scripts-files:/opt/netbox/netbox/scripts:Z
 Volume=./netbox-configuration:/etc/netbox/config:Z,ro
 HealthInterval=15s
 HealthTimeout=3s
-HealthStartPeriod=90s
+HealthStartPeriod=300s
 HealthCmd=curl -f http://localhost:8080/login/ || exit 1
 Pod=netbox.pod
