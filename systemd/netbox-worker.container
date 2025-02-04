@@ -15,7 +15,7 @@ Volume=./netbox-configuration:/etc/netbox/config:Z,ro
 
 HealthInterval=15s
 HealthTimeout=3s
-HealthStartPeriod=20s
+HealthStartPeriod=300s
 HealthCmd=ps -aux | grep -v grep | grep -q rqworker || exit 1
 Exec=/opt/netbox/venv/bin/python /opt/netbox/netbox/manage.py rqworker
 Pod=netbox.pod

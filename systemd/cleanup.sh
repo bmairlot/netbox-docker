@@ -43,6 +43,8 @@ else
 fi
 
 # Execute commands
+systemctl $SUSER stop "${NAME}"-housekeeping
+systemctl $SUSER stop "${NAME}"-worker
 systemctl $SUSER stop "${NAME}"-netbox
 systemctl $SUSER stop "${NAME}"-redis-cache
 systemctl $SUSER stop "${NAME}"-redis
