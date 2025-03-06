@@ -1,6 +1,7 @@
 ARG FROM
 FROM ${FROM} AS builder
 
+COPY --from=ghcr.io/astral-sh/uv:0.5 /uv /usr/local/bin/
 RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get update -qq \
     && apt-get upgrade \
@@ -20,16 +21,11 @@ RUN export DEBIAN_FRONTEND=noninteractive \
       libxslt-dev \
       pkg-config \
       python3-dev \
-      python3-pip \
-      python3-venv \
-    && python3 -m venv /opt/netbox/venv \
-    && /opt/netbox/venv/bin/python3 -m pip install --upgrade \
-      pip \
-      setuptools \
-      wheel
+    && /usr/local/bin/uv venv /opt/netbox/venv
 
 ARG NETBOX_PATH
 COPY ${NETBOX_PATH}/requirements.txt requirements-container.txt /
+ENV VIRTUAL_ENV=/opt/netbox/venv
 RUN \
     # Gunicorn is not needed because we use Nginx Unit
     sed -i -e '/gunicorn/d' /requirements.txt && \
@@ -37,7 +33,7 @@ RUN \
     # we have potential version conflicts and the build will fail.
     # That's why we just replace it in the original requirements.txt.
     sed -i -e 's/social-auth-core/social-auth-core\[all\]/g' /requirements.txt && \
-    /opt/netbox/venv/bin/pip install \
+    /usr/local/bin/uv pip install \
       -r /requirements.txt \
       -r /requirements-container.txt
 
@@ -75,12 +71,13 @@ RUN export DEBIAN_FRONTEND=noninteractive \
       unit-python3.12=1.34.1-1~noble \
     && rm -rf /var/lib/apt/lists/*
 
+# Copy the modified 'requirements*.txt' files, to have the files actually used during installation
+COPY --from=builder /requirements.txt /requirements-container.txt /opt/netbox/
+COPY --from=builder /usr/local/bin/uv /usr/local/bin/
 COPY --from=builder /opt/netbox/venv /opt/netbox/venv
 
 ARG NETBOX_PATH
 COPY ${NETBOX_PATH} /opt/netbox
-# Copy the modified 'requirements*.txt' files, to have the files actually used during installation
-COPY --from=builder /requirements.txt /requirements-container.txt /opt/netbox/
 
 COPY docker/configuration.docker.py /opt/netbox/netbox/netbox/configuration.py
 COPY docker/ldap_config.docker.py /opt/netbox/netbox/netbox/ldap_config.py
@@ -89,6 +86,7 @@ COPY docker/housekeeping.sh /opt/netbox/housekeeping.sh
 COPY docker/launch-netbox.sh /opt/netbox/launch-netbox.sh
 COPY configuration/ /etc/netbox/config/
 COPY docker/nginx-unit.json /etc/unit/
+COPY VERSION /opt/netbox/VERSION
 
 WORKDIR /opt/netbox/netbox
 
@@ -99,9 +97,11 @@ RUN mkdir -p static /opt/unit/state/ /opt/unit/tmp/ \
       && chmod -R g+w /opt/unit/ media reports scripts \
       && cd /opt/netbox/ && SECRET_KEY="dummyKeyWithMinimumLength-------------------------" /opt/netbox/venv/bin/python -m mkdocs build \
           --config-file /opt/netbox/mkdocs.yml --site-dir /opt/netbox/netbox/project-static/docs/ \
-      && SECRET_KEY="dummyKeyWithMinimumLength-------------------------" /opt/netbox/venv/bin/python /opt/netbox/netbox/manage.py collectstatic --no-input
+      && DEBUG="true" SECRET_KEY="dummyKeyWithMinimumLength-------------------------" /opt/netbox/venv/bin/python /opt/netbox/netbox/manage.py collectstatic --no-input \
+      && mkdir /opt/netbox/netbox/local \
+      && echo "build: Docker-$(cat /opt/netbox/VERSION)" > /opt/netbox/netbox/local/release.yaml
 
-ENV LANG=C.utf8 PATH=/opt/netbox/venv/bin:$PATH
+ENV LANG=C.utf8 PATH=/opt/netbox/venv/bin:$PATH VIRTUAL_ENV=/opt/netbox/venv UV_NO_CACHE=1
 ENTRYPOINT [ "/usr/bin/tini", "--" ]
 
 CMD [ "/opt/netbox/docker-entrypoint.sh", "/opt/netbox/launch-netbox.sh" ]
