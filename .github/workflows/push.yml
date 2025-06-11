@@ -41,7 +41,7 @@ jobs:
           VALIDATE_GITLEAKS: false
           VALIDATE_JSCPD: false
           FILTER_REGEX_EXCLUDE: (.*/)?(LICENSE|configuration/.*)
-          EDITORCONFIG_FILE_NAME: .ecrc
+          EDITORCONFIG_FILE_NAME: .editorconfig-checker.json
           DOCKERFILE_HADOLINT_FILE_NAME: .hadolint.yaml
           MARKDOWN_CONFIG_FILE: .markdown-lint.yml
           PYTHON_BLACK_CONFIG_FILE: pyproject.toml

@@ -13,11 +13,13 @@ jobs:
   build:
     strategy:
       matrix:
-        build_cmd:
-          - ./build-latest.sh
-          - PRERELEASE=true ./build-latest.sh
-          - ./build.sh feature
-          - ./build.sh main
+        build:
+          - { "cmd": "./build-latest.sh", "branch": "release" }
+          - { "cmd": "./build.sh main", "branch": "release" }
+          # Build pre release images from our develop branch
+          # This is used to test the latest changes before they are merged into the main branch
+          - { "cmd": "PRERELEASE=true ./build-latest.sh", "branch": "develop" }
+          - { "cmd": "./build.sh feature", "branch": "develop" }
         platform:
           - linux/amd64,linux/arm64
       fail-fast: false
@@ -31,15 +33,17 @@ jobs:
       - id: source-checkout
         name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.build.branch }}
       - id: set-netbox-docker-version
         name: Get Version of NetBox Docker
         run: echo "version=$(cat VERSION)" >>"$GITHUB_OUTPUT"
         shell: bash
       - id: check-build-needed
-        name: Check if the build is needed for '${{ matrix.build_cmd }}'
+        name: Check if the build is needed for '${{ matrix.build.cmd }}'
         env:
           CHECK_ONLY: "true"
-        run: ${{ matrix.build_cmd }}
+        run: ${{ matrix.build.cmd }}
       # docker.io
       - id: docker-io-login
         name: Login to docker.io
@@ -77,7 +81,7 @@ jobs:
         if: steps.check-build-needed.outputs.skipped != 'true'
       - id: build-and-push
         name: Push the image
-        run: ${{ matrix.build_cmd }} --push
+        run: ${{ matrix.build.cmd }} --push
         if: steps.check-build-needed.outputs.skipped != 'true'
         env:
           BUILDX_PLATFORM: ${{ matrix.platform }}

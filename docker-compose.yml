@@ -1,6 +1,6 @@
 services:
   netbox: &netbox
-    image: docker.io/netboxcommunity/netbox:${VERSION-v4.2-3.2.0}
+    image: docker.io/netboxcommunity/netbox:${VERSION-v4.3-3.3.0}
     depends_on:
       - postgres
       - redis
@@ -59,7 +59,7 @@ services:
 
   # redis
   redis:
-    image: docker.io/valkey/valkey:8.0-alpine
+    image: docker.io/valkey/valkey:8.1-alpine
     command:
       - sh
       - -c # this is to evaluate the $REDIS_PASSWORD from the env
@@ -74,7 +74,7 @@ services:
     volumes:
       - netbox-redis-data:/data
   redis-cache:
-    image: docker.io/valkey/valkey:8.0-alpine
+    image: docker.io/valkey/valkey:8.1-alpine
     command:
       - sh
       - -c # this is to evaluate the $REDIS_PASSWORD from the env
