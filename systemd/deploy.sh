@@ -21,6 +21,29 @@ execute_command() {
    fi
 }
 
+# Function to generate a random password
+generate_password() {
+    local length="${1:-16}"
+    # Generate a random password using /dev/urandom
+    # Using alphanumeric characters only to avoid shell escaping issues
+    tr -dc 'A-Za-z0-9' < /dev/urandom | head -c "$length"
+}
+
+# Function to update password in env files
+update_env_password() {
+    local file="$1"
+    local var_name="$2"
+    local new_password="$3"
+
+    if [ -f "$file" ]; then
+        # Use sed to replace the password value
+        sed -i "s/^${var_name}=.*/${var_name}=${new_password}/" "$file"
+        echo "Updated ${var_name} in $(basename "$file")"
+    else
+        error_exit "File $file not found"
+    fi
+}
+
 # Default name
 NAME="netbox"
 RESTORE_FILE=""
@@ -69,11 +92,48 @@ else
     echo "Quadlet files copied successfully from $SCRIPT_DIR to $DESTINATION."
 fi
 
-# Copy env directory
+# Copy env directory with password generation if needed
 echo "Copying env directory..."
 if [ -d "$PARENT_DIR/env" ]; then
-    cp -r "$PARENT_DIR/env" "$DESTINATION/" || error_exit "Failed to copy env directory to $DESTINATION."
-    echo "env directory copied successfully to $DESTINATION."
+    # Check if env directory already exists at destination
+    if [ -d "$DESTINATION/env" ]; then
+        echo "env directory already exists at $DESTINATION. Skipping password generation."
+    else
+        # Copy env directory
+        cp -r "$PARENT_DIR/env" "$DESTINATION/" || error_exit "Failed to copy env directory to $DESTINATION."
+        echo "env directory copied successfully to $DESTINATION."
+
+        # Generate random passwords
+        echo "Generating random passwords for new installation..."
+
+        # Generate PostgreSQL password
+        POSTGRES_PASS=$(generate_password 20)
+        echo "Generated new PostgreSQL password"
+
+        # Generate Redis passwords
+        REDIS_PASS=$(generate_password 20)
+        REDIS_CACHE_PASS=$(generate_password 20)
+        echo "Generated new Redis passwords"
+
+        # Update PostgreSQL password in both files
+        update_env_password "$DESTINATION/env/postgres.env" "POSTGRES_PASSWORD" "$POSTGRES_PASS"
+        update_env_password "$DESTINATION/env/netbox.env" "DB_PASSWORD" "$POSTGRES_PASS"
+
+        # Update Redis password
+        update_env_password "$DESTINATION/env/redis.env" "REDIS_PASSWORD" "$REDIS_PASS"
+        update_env_password "$DESTINATION/env/netbox.env" "REDIS_PASSWORD" "$REDIS_PASS"
+
+        # Update Redis cache password
+        update_env_password "$DESTINATION/env/redis-cache.env" "REDIS_PASSWORD" "$REDIS_CACHE_PASS"
+        update_env_password "$DESTINATION/env/netbox.env" "REDIS_CACHE_PASSWORD" "$REDIS_CACHE_PASS"
+
+        # Also generate a new SECRET_KEY for Django
+        SECRET_KEY=$(generate_password 50)
+        update_env_password "$DESTINATION/env/netbox.env" "SECRET_KEY" "'$SECRET_KEY'"
+        echo "Generated new Django SECRET_KEY"
+
+        echo "Password generation complete. Passwords have been securely randomized."
+    fi
 else
     echo "env directory not found in $PARENT_DIR."
 fi
