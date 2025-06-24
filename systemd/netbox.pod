@@ -1,5 +1,7 @@
 [Unit]
 Description=Netbox Pod
+Requires=netbox-network.service
+After=netbox-network.service
 
 [Pod]
 PodName=netbox
@@ -9,3 +11,8 @@ Network=netbox
 DNS=172.16.0.1
 IP=172.16.0.172
 
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
