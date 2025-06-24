@@ -3,7 +3,7 @@ Description=Netbox housekeeping Container
 Requires=netbox-netbox.service
 
 [Container]
-Image=docker.io/netboxcommunity/netbox:latest-3.1.1
+Image=docker.io/netboxcommunity/netbox:latest-3.3.0
 ContainerName=netbox-housekeeping
 EnvironmentFile=env/netbox.env
 Volume=./netbox-configuration:/etc/netbox/config:Z,ro
