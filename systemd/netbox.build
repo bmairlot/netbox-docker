@@ -2,6 +2,6 @@
 Description=Build Netbox when using plugin (or not)
 
 [Build]
-File=/root/netbox-docker/Dockerfile-Plugins
+File=/home/netbox/netbox-docker/Dockerfile-Plugins
 ImageTag=localhost/netbox:latest
 SetWorkingDirectory=/root/netbox-docker
