@@ -1,4 +1,4 @@
-FROM netboxcommunity/netbox:latest
+FROM docker.io/netboxcommunity/netbox:latest-3.3.0
 
 COPY ./plugin_requirements.txt /opt/netbox/
 RUN /usr/local/bin/uv pip install -r /opt/netbox/plugin_requirements.txt
