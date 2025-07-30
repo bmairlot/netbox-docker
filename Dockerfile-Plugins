@@ -7,4 +7,4 @@ RUN /usr/local/bin/uv pip install -r /opt/netbox/plugin_requirements.txt
 COPY configuration/configuration.py /etc/netbox/config/configuration.py
 COPY configuration/plugins.py /etc/netbox/config/plugins.py
 
-RUN DEBUG="true" SECRET_KEY="bb8ebeff-3b91-4d66-8663-8dfcdfdcea58" /opt/netbox/venv/bin/python /opt/netbox/netbox/manage.py collectstatic --no-input
+RUN DEBUG="true" SECRET_KEY="dummydummydummydummydummydummydummydummydummydummy" /opt/netbox/venv/bin/python /opt/netbox/netbox/manage.py collectstatic --no-input
