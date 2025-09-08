@@ -3,7 +3,7 @@ Description=Netbox housekeeping Container
 Requires=netbox-netbox.service
 
 [Container]
-#Image=docker.io/netboxcommunity/netbox:latest-3.3.0
+#Image=docker.io/netboxcommunity/netbox:latest-3.4.0
 Image=localhost/netbox:latest
 #AddHost=redis:192.168.10.10
 #AddHost=redis-cache:192.168.10.11

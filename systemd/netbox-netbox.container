@@ -3,7 +3,7 @@ Description=Netbox Container
 Requires=netbox-postgres.service netbox-redis.service netbox-redis-cache.service
 
 [Container]
-#Image=docker.io/netboxcommunity/netbox:latest-3.3.0
+#Image=docker.io/netboxcommunity/netbox:latest-3.4.0
 Image=localhost/netbox:latest
 ContainerName=netbox-netbox
 EnvironmentFile=env/netbox.env
